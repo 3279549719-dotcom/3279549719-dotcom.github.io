@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>雅思词汇复习 · 新词 / Test / 错题集</title>
+<style>
+  :root{
+    --bg:#f6f3ec; --card:#fffdf8; --ink:#262019; --muted:#8a8071;
+    --accent:#b3551f; --line:#e6dfd0; --ok:#3a7d44; --err:#b03a2e;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  body{
+    font-family:Georgia,"Noto Serif SC","Songti SC",serif;
+    background:var(--bg); color:var(--ink);
+    max-width:640px; margin:0 auto; padding:20px 16px 90px; line-height:1.65; font-size:16px;
+    -webkit-font-smoothing:antialiased;
+  }
+  header{padding:12px 4px 8px}
+  h1{font-size:26px; letter-spacing:.5px}
+  .sub{color:var(--muted); font-size:13px; margin-top:2px}
+  .tabs{display:flex; gap:8px; margin:14px 0 18px}
+  .tab-btn{
+    flex:1; padding:10px 0; border:1px solid var(--line); border-radius:10px;
+    background:var(--card); font-family:inherit; font-size:15px; color:var(--ink);
+    cursor:pointer; transition:all .15s;
+  }
+  .tab-btn.active{
+    background:var(--ink); color:#fff; border-color:var(--ink);
+  }
+  .tab-btn .cnt{display:block; font-size:12px; opacity:.7; margin-top:2px}
+  .panel{display:none}
+  .panel.active{display:block}
+
+  /* ===== Section 1 新词 ===== */
+  .batch{
+    background:var(--card); border:1px solid var(--line); border-radius:12px;
+    margin-bottom:10px; overflow:hidden;
+  }
+  .batch-head{
+    display:flex; align-items:center; gap:10px; padding:12px 14px; cursor:pointer;
+  }
+  .batch-head .date{font-size:14px; font-weight:bold}
+  .batch-head .meta{font-size:12px; color:var(--muted); flex:1}
+  .batch-head .arrow{color:var(--muted); font-size:12px; transition:transform .15s}
+  .batch.open .batch-head .arrow{transform:rotate(180deg)}
+  .batch-body{display:none; border-top:1px solid var(--line)}
+  .batch.open .batch-body{display:block}
+  .w-row{
+    display:flex; gap:10px; padding:10px 14px; border-bottom:1px solid var(--line);
+    font-size:15px;
+  }
+  .w-row:last-child{border-bottom:none}
+  .w-row .w{font-weight:bold; min-width:120px; font-size:16px}
+  .w-row .w .ph{display:block; font-size:12px; color:var(--muted); font-weight:normal}
+  .w-row .w .mn{display:block; font-size:12px; color:var(--muted); font-weight:normal; margin-top:2px}
+  .w-row .def{flex:1}
+  .w-row .def .ex{font-size:12.5px; color:#5a5144; font-style:italic; margin-top:3px; display:block}
+
+  /* ===== Section 2 Test ===== */
+  .test-box{
+    background:var(--card); border:1px solid var(--line); border-radius:14px;
+    padding:28px 20px; text-align:center;
+  }
+  .test-progress{font-size:13px; color:var(--muted); margin-bottom:6px}
+  .test-word{font-size:34px; font-weight:bold; letter-spacing:1px; margin:16px 0 4px}
+  .test-ph{font-size:15px; color:var(--muted); margin-bottom:20px}
+  .test-detail{display:none; text-align:left; background:var(--bg); border-radius:10px; padding:14px 16px; margin:8px 0 18px}
+  .test-detail.show{display:block}
+  .test-detail .lbl{color:var(--muted); font-size:12.5px; margin-right:6px}
+  .test-detail div{margin:5px 0; font-size:15px}
+  .test-btns{display:flex; gap:8px; margin-top:8px}
+  .tbtn{
+    flex:1; padding:11px 0; border-radius:10px; border:1px solid var(--line);
+    background:#fff; font-family:inherit; font-size:14px; cursor:pointer;
+  }
+  .tbtn.got{color:var(--ok); border-color:var(--ok)}
+  .tbtn.miss{color:var(--err); border-color:var(--err)}
+  .tbtn.reveal{color:var(--accent); border-color:var(--accent)}
+  .tbtn:disabled{opacity:.4; cursor:default}
+  .test-empty{padding:40px 20px; text-align:center; color:var(--muted)}
+  .test-empty b{display:block; font-size:20px; color:var(--ink); margin-bottom:6px}
+  .test-done{font-size:15px; padding:10px 0}
+
+  /* ===== Section 3 错题集 ===== */
+  .err-count{
+    background:var(--card); border-left:4px solid var(--accent); border-radius:8px;
+    padding:10px 16px; margin-bottom:14px; font-size:15px;
+  }
+  .err-count b{color:var(--accent); font-size:19px}
+  .e-row{
+    display:flex; align-items:center; gap:10px;
+    background:var(--card); border:1px solid var(--line); border-radius:10px;
+    padding:11px 14px; margin-bottom:8px;
+  }
+  .e-row input[type=checkbox]{width:19px; height:19px; accent-color:var(--ok); cursor:pointer; flex-shrink:0}
+  .e-word{font-size:18px; font-weight:bold; flex:1}
+  .e-expand{
+    border:1px solid var(--line); background:#fff; border-radius:8px; padding:4px 12px;
+    font-family:inherit; font-size:13px; color:#555; cursor:pointer;
+  }
+  .e-detail{
+    display:none; background:var(--card); border:1px solid var(--line); border-top:none;
+    border-radius:0 0 10px 10px; padding:4px 14px 14px; margin:-8px 0 8px; color:#444; font-size:15px;
+  }
+  .e-detail.show{display:block}
+  .e-detail .lbl{color:var(--muted); font-size:12.5px; margin-right:6px}
+  .e-detail div{margin:5px 0}
+  .err-empty{
+    text-align:center; color:var(--muted); padding:50px 20px; font-size:15px;
+    border:2px dashed var(--line); border-radius:14px;
+  }
+  .mini-btn{
+    display:inline-block; margin-left:8px; padding:3px 12px; font-size:12px;
+    border:1px solid var(--line); border-radius:8px; background:#fff; color:var(--ink);
+    cursor:pointer; vertical-align:middle;
+  }
+  .mini-btn:hover{border-color:var(--accent); color:var(--accent)}
+
+  .foot{margin-top:26px; font-size:12px; color:var(--muted); text-align:center; line-height:1.8}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>📚 雅思词汇复习</h1>
+  <p class="sub">每天 20:00 新词入库 · 每天 10:00 Test 昨日新词 · 错词自动进错题集</p>
+</header>
+
+<nav class="tabs">
+  <button class="tab-btn active" data-panel="new">📖 新词<span class="cnt" id="cnt-new"></span></button>
+  <button class="tab-btn" data-panel="test">📝 Test<span class="cnt" id="cnt-test"></span></button>
+  <button class="tab-btn" data-panel="err">📕 错题集<span class="cnt" id="cnt-err"></span></button>
+</nav>
+
+<section id="panel-new" class="panel active">
+  <div id="batch-list"></div>
+</section>
+
+<section id="panel-test" class="panel">
+  <div id="test-box" class="test-box"></div>
+</section>
+
+<section id="panel-err" class="panel">
+  <div class="err-count">错题集当前共 <b id="err-num">0</b> 个词
+    <button class="mini-btn" onclick="exportData()">导出备份</button>
+    <button class="mini-btn" onclick="document.getElementById('import-file').click()">导入恢复</button>
+    <input type="file" id="import-file" accept=".json" style="display:none" onchange="importData(event)">
+  </div>
+  <div id="err-list"></div>
+  <div class="err-empty" id="err-empty" style="display:none">暂无错词，继续保持 💪</div>
+</section>
+
+<div class="foot">
+  学习状态存在浏览器本地（localStorage），刷新不丢；清浏览器缓存会重置。<br>
+  每晚 20:00 推送的新词由助手自动写入本文件词库；Test 中"没记住"的词自动进入错题集。
+</div>
+
+<script>
+const BATCHES = [
+ {
+  "id": "hist-01",
+  "date": "第 1 批",
+  "testable": false,
+  "words": [
+   { "word": "ubiquitous", "phonetic": "/juːˈbɪkwɪtəs/", "meaning": "无处不在的", "mnemonic": "优步(Uber)到处跑" },
+   { "word": "mitigate", "phonetic": "/ˈmɪtɪɡeɪt/", "meaning": "缓解，减轻", "mnemonic": "灾难缩到迷你" },
+   { "word": "pivotal", "phonetic": "/ˈpɪvətəl/", "meaning": "关键性的", "mnemonic": "门轴(pivot)级关键" },
+   { "word": "sustainable", "phonetic": "/səˈsteɪnəbl/", "meaning": "可持续的", "mnemonic": "撑得住＝可持续" },
+   { "word": "deteriorate", "phonetic": "/dɪˈtɪəriəreɪt/", "meaning": "恶化，变差", "mnemonic": "往地底掉" },
+   { "word": "scrutinize", "phonetic": "/ˈskruːtənaɪz/", "meaning": "仔细审查", "mnemonic": "死抠着查" },
+   { "word": "inevitable", "phonetic": "/ɪnˈevɪtəbl/", "meaning": "不可避免的", "mnemonic": "避不开的" },
+   { "word": "affluent", "phonetic": "/ˈæfluənt/", "meaning": "富裕的", "mnemonic": "钱如流水" },
+   { "word": "exacerbate", "phonetic": "/ɪɡˈzæsəbeɪt/", "meaning": "使恶化，加剧", "mnemonic": "弄得更尖锐(acerb)" },
+   { "word": "paradigm", "phonetic": "/ˈpærədaɪm/", "meaning": "范式，模式", "mnemonic": "放旁边给人看的示范" }
+  ]
+ },
+ {
+  "id": "hist-02",
+  "date": "第 2 批",
+  "testable": false,
+  "words": [
+   { "word": "alleviate", "phonetic": "/əˈliːvieɪt/", "meaning": "减轻，缓解", "mnemonic": "负担变轻(levi)" },
+   { "word": "indispensable", "phonetic": "/ˌɪndɪˈspensəbl/", "meaning": "不可或缺的", "mnemonic": "省不掉的" },
+   { "word": "escalate", "phonetic": "/ˈeskəleɪt/", "meaning": "升级，加剧", "mnemonic": "越吵越凶" },
+   { "word": "discrepancy", "phonetic": "/dɪsˈkrepənsi/", "meaning": "差异，不一致", "mnemonic": "对不上咔哒响" },
+   { "word": "holistic", "phonetic": "/həˈlɪstɪk/", "meaning": "整体的，全面的", "mnemonic": "whole 整体观" },
+   { "word": "jeopardize", "phonetic": "/ˈdʒepədaɪz/", "meaning": "危及，损害", "mnemonic": "节拍带死→节奏乱全盘输" },
+   { "word": "meticulous", "phonetic": "/məˈtɪkjələs/", "meaning": "一丝不苟的", "mnemonic": "没细节可漏" },
+   { "word": "obsolete", "phonetic": "/ˈɒbsəliːt/", "meaning": "过时的，被淘汰的", "mnemonic": "不再使用" },
+   { "word": "pragmatic", "phonetic": "/præɡˈmætɪk/", "meaning": "务实的", "mnemonic": "讲实际动手" },
+   { "word": "thrive", "phonetic": "/θraɪv/", "meaning": "繁荣，茁壮成长", "mnemonic": "心脏强有力地跳" }
+  ]
+ },
+ {
+  "id": "hist-03",
+  "date": "第 3 批",
+  "testable": false,
+  "words": [
+   { "word": "coherent", "phonetic": "/kəʊˈhɪərənt/", "meaning": "连贯的，有条理的", "mnemonic": "粘在一起(here)" },
+   { "word": "diminish", "phonetic": "/dɪˈmɪnɪʃ/", "meaning": "减少，削弱", "mnemonic": "变小(mini)" },
+   { "word": "enhance", "phonetic": "/ɪnˈhɑːns/", "meaning": "提高，增强", "mnemonic": "谐音'增强死'" },
+   { "word": "feasible", "phonetic": "/ˈfiːzəbl/", "meaning": "可行的", "mnemonic": "做得成(feat)" },
+   { "word": "marginalize", "phonetic": "/ˈmɑːdʒɪnəlaɪz/", "meaning": "使边缘化", "mnemonic": "推到边缘(margin)" },
+   { "word": "notorious", "phonetic": "/nəʊˈtɔːriəs/", "meaning": "臭名昭著的", "mnemonic": "坏事人尽皆知" },
+   { "word": "prone", "phonetic": "/prəʊn/", "meaning": "易于…的", "mnemonic": "一碰就倒(扑棱)" },
+   { "word": "replicate", "phonetic": "/ˈreplɪkeɪt/", "meaning": "复制，重现", "mnemonic": "再折一份(plic)" },
+   { "word": "stringent", "phonetic": "/ˈstrɪndʒənt/", "meaning": "严格的（法规）", "mnemonic": "弦绷得很紧" },
+   { "word": "undermine", "phonetic": "/ˌʌndəˈmaɪn/", "meaning": "削弱，损害", "mnemonic": "从底下挖墙角" }
+  ]
+ },
+ {
+  "id": "hist-04",
+  "date": "第 4 批",
+  "testable": false,
+  "words": [
+   { "word": "advocate", "phonetic": "/ˈædvəkeɪt/", "meaning": "提倡，主张", "mnemonic": "为其发声(voc)" },
+   { "word": "coincide", "phonetic": "/ˌkəʊɪnˈsaɪd/", "meaning": "同时发生；相符", "mnemonic": "落在同一个点" },
+   { "word": "implement", "phonetic": "/ˈɪmplɪment/", "meaning": "实施，执行", "mnemonic": "把计划填满" },
+   { "word": "incentive", "phonetic": "/ɪnˈsentɪv/", "meaning": "激励，动力", "mnemonic": "兜里有钱(cent)" },
+   { "word": "conventional", "phonetic": "/kənˈvenʃənl/", "meaning": "传统的，常规的", "mnemonic": "照惯例来" },
+   { "word": "detrimental", "phonetic": "/ˌdetrɪˈmentl/", "meaning": "有害的", "mnemonic": "拿锤砸门" },
+   { "word": "foster", "phonetic": "/ˈfɒstə(r)/", "meaning": "培养，促进", "mnemonic": "福斯特＝抚养" },
+   { "word": "hypothesis", "phonetic": "/haɪˈpɒθəsɪs/", "meaning": "假设，假说", "mnemonic": "垫在下面的观点" },
+   { "word": "phenomenon", "phonetic": "/fəˈnɒmɪnən/", "meaning": "现象", "mnemonic": "飞脑门→现象飞进脑海" },
+   { "word": "viable", "phonetic": "/ˈvaɪəbl/", "meaning": "可行的", "mnemonic": "有路可走(via)" }
+  ]
+ },
+ {
+  "id": "hist-05",
+  "date": "第 5 批",
+  "testable": false,
+  "words": [
+   { "word": "ambiguous", "phonetic": "/æmˈbɪɡjuəs/", "meaning": "模棱两可的", "mnemonic": "两边都够" },
+   { "word": "bolster", "phonetic": "/ˈbəʊlstə(r)/", "meaning": "支持，巩固", "mnemonic": "抱死他＝死死撑腰" },
+   { "word": "comprehensive", "phonetic": "/ˌkɒmprɪˈhensɪv/", "meaning": "全面的", "mnemonic": "全部抓住(prehend)" },
+   { "word": "deter", "phonetic": "/dɪˈtɜː(r)/", "meaning": "阻止，威慑", "mnemonic": "吓得不敢动" },
+   { "word": "elaborate", "phonetic": "/ɪˈlæbərət/", "meaning": "详尽的，精心制作的", "mnemonic": "下足功夫做出来" },
+   { "word": "fluctuate", "phonetic": "/ˈflʌktʃueɪt/", "meaning": "波动", "mnemonic": "如水波流动(fluct)" },
+   { "word": "genuine", "phonetic": "/ˈdʒenjuɪn/", "meaning": "真实的，真诚的", "mnemonic": "基因里带的＝天生的真" },
+   { "word": "inherent", "phonetic": "/ɪnˈhɪərənt/", "meaning": "固有的，内在的", "mnemonic": "长在里面" },
+   { "word": "paramount", "phonetic": "/ˈpærəmaʊnt/", "meaning": "至为重要的", "mnemonic": "凌驾一切(mount)" },
+   { "word": "tangible", "phonetic": "/ˈtændʒəbl/", "meaning": "有形的，实际的", "mnemonic": "摸得着的" }
+  ]
+ },
+ {
+  "id": "hist-06",
+  "date": "第 6 批",
+  "testable": false,
+  "words": [
+   { "word": "acknowledge", "phonetic": "/əkˈnɒlɪdʒ/", "meaning": "承认，认可", "mnemonic": "以知识面对(knowledge)" },
+   { "word": "compensate", "phonetic": "/ˈkɒmpenseɪt/", "meaning": "补偿，弥补", "mnemonic": "称足分量补上(pens)" },
+   { "word": "deprive", "phonetic": "/dɪˈpraɪv/", "meaning": "剥夺，使丧失", "mnemonic": "把私有的夺走" },
+   { "word": "endorse", "phonetic": "/ɪnˈdɔːs/", "meaning": "支持，背书", "mnemonic": "背面签字" },
+   { "word": "facilitate", "phonetic": "/fəˈsɪlɪteɪt/", "meaning": "促进，使便利", "mnemonic": "让事情变容易(facile)" },
+   { "word": "imperative", "phonetic": "/ɪmˈperətɪv/", "meaning": "迫切的，必要的", "mnemonic": "皇帝下令(imper)" },
+   { "word": "lavish", "phonetic": "/ˈlævɪʃ/", "meaning": "奢侈的，大量的", "mnemonic": "拉维斯酒庄" },
+   { "word": "moderate", "phonetic": "/ˈmɒdərət/", "meaning": "适度的，温和的", "mnemonic": "守在尺度内(mod)" },
+   { "word": "prohibit", "phonetic": "/prəˈhɪbɪt/", "meaning": "禁止（正式）", "mnemonic": "提前拦住(hibit)" },
+   { "word": "resilient", "phonetic": "/rɪˈzɪliənt/", "meaning": "有韧性的", "mnemonic": "弹回来(re+sil)" }
+  ]
+ },
+ {
+  "id": "hist-07",
+  "date": "第 7 批",
+  "testable": false,
+  "words": [
+   { "word": "accessible", "phonetic": "/əkˈsesəbl/", "meaning": "可获得的，易理解的", "mnemonic": "进得去" },
+   { "word": "articulate", "phonetic": "/ɑːˈtɪkjuleɪt/", "meaning": "清楚表达", "mnemonic": "关节般接得顺畅" },
+   { "word": "cater", "phonetic": "/ˈkeɪtə(r)/", "meaning": "迎合，满足(cater to)", "mnemonic": "给他想要的" },
+   { "word": "controversial", "phonetic": "/ˌkɒntrəˈvɜːʃl/", "meaning": "有争议的", "mnemonic": "两方转着互怼" },
+   { "word": "diversify", "phonetic": "/daɪˈvɜːsɪfaɪ/", "meaning": "使多样化", "mnemonic": "变多样" },
+   { "word": "engage", "phonetic": "/ɪnˈɡeɪdʒ/", "meaning": "参与；吸引(engage in)", "mnemonic": "给点参与感" },
+   { "word": "exempt", "phonetic": "/ɪɡˈzempt/", "meaning": "被豁免的(exempt from)", "mnemonic": "被拿出去(empt)" },
+   { "word": "exploit", "phonetic": "/ɪkˈsplɔɪt/", "meaning": "利用，开发；剥削", "mnemonic": "爱死破楼→榨干" },
+   { "word": "innovative", "phonetic": "/ˈɪnəveɪtɪv/", "meaning": "创新的", "mnemonic": "引入新东西(nov)" },
+   { "word": "nurture", "phonetic": "/ˈnɜːtʃə(r)/", "meaning": "培养，养育", "mnemonic": "拿吃＝喂养" }
+  ]
+ },
+ {
+  "id": "hist-08",
+  "date": "第 8 批",
+  "testable": false,
+  "words": [
+   { "word": "rigorous", "phonetic": "/ˈrɪɡərəs/", "meaning": "严谨的，严格的", "mnemonic": "一丝不动摇(rig)" },
+   { "word": "plausible", "phonetic": "/ˈplɔːzəbl/", "meaning": "貌似合理的", "mnemonic": "想让人鼓掌(plaus)" },
+   { "word": "transparent", "phonetic": "/trænsˈpærənt/", "meaning": "透明的，公开的", "mnemonic": "一眼看穿" },
+   { "word": "versatile", "phonetic": "/ˈvɜːsətaɪl/", "meaning": "多才多艺的，多用途的", "mnemonic": "朝各方向转(vers)" },
+   { "word": "profound", "phonetic": "/prəˈfaʊnd/", "meaning": "深刻的，深远的", "mnemonic": "探到最底部" },
+   { "word": "offset", "phonetic": "/ˈɒfset/", "meaning": "抵消，补偿", "mnemonic": "放到一边对冲" },
+   { "word": "levy", "phonetic": "/ˈlevi/", "meaning": "征收（税/罚款）", "mnemonic": "来威逼交钱" },
+   { "word": "lucid", "phonetic": "/ˈluːsɪd/", "meaning": "清晰易懂的", "mnemonic": "光亮照人(luc)" },
+   { "word": "precarious", "phonetic": "/prɪˈkeəriəs/", "meaning": "不稳定的，危险的", "mnemonic": "要预先恳求才有" },
+   { "word": "verify", "phonetic": "/ˈverɪfaɪ/", "meaning": "核实，查证", "mnemonic": "使成真(ver)" }
+  ]
+ },
+ {
+  "id": "hist-09",
+  "date": "第 9 批",
+  "testable": false,
+  "words": [
+   { "word": "bias", "phonetic": "/ˈbaɪəs/", "meaning": "偏见，偏向；偏差", "mnemonic": "只拜一边" },
+   { "word": "compelling", "phonetic": "/kəmˈpelɪŋ/", "meaning": "令人信服的；引人入胜", "mnemonic": "推着人走(pel)" },
+   { "word": "curb", "phonetic": "/kɜːb/", "meaning": "抑制，控制", "mnemonic": "磕磕绊绊拦住脚步" },
+   { "word": "dilemma", "phonetic": "/daɪˈlemə/", "meaning": "困境，两难", "mnemonic": "两条路都难走" },
+   { "word": "legislation", "phonetic": "/ˌledʒɪsˈleɪʃn/", "meaning": "立法，法规", "mnemonic": "带来法律(leg)" },
+   { "word": "obscure", "phonetic": "/əbˈskjʊə(r)/", "meaning": "模糊的；使模糊", "mnemonic": "被盖住看不见" },
+   { "word": "pledge", "phonetic": "/pledʒ/", "meaning": "保证，承诺", "mnemonic": "写保证书按手印" },
+   { "word": "reconcile", "phonetic": "/ˈrekənsaɪl/", "meaning": "调和，使一致；和解", "mnemonic": "重新坐在一起" },
+   { "word": "sceptical", "phonetic": "/ˈskeptɪkl/", "meaning": "怀疑的(sceptical of)", "mnemonic": "死磕着不轻信" },
+   { "word": "upheaval", "phonetic": "/ʌpˈhiːvl/", "meaning": "剧变，动荡", "mnemonic": "被整个掀起来" }
+  ]
+ },
+ {
+  "id": "hist-10",
+  "date": "第 10 批",
+  "testable": false,
+  "words": [
+   { "word": "allocate", "phonetic": "/ˈæləkeɪt/", "meaning": "分配，划拨", "mnemonic": "派到该去的地方" },
+   { "word": "conducive", "phonetic": "/kənˈdjuːsɪv/", "meaning": "有助于…的", "mnemonic": "引导向好的方向" },
+   { "word": "deficient", "phonetic": "/dɪˈfɪʃnt/", "meaning": "不足的，缺乏的", "mnemonic": "缺的(defic)" },
+   { "word": "explicit", "phonetic": "/ɪkˈsplɪsɪt/", "meaning": "明确的，清楚的", "mnemonic": "摊开来说" },
+   { "word": "influx", "phonetic": "/ˈɪnflʌks/", "meaning": "大量涌入", "mnemonic": "大量流入(flux)" },
+   { "word": "mandate", "phonetic": "/ˈmændeɪt/", "meaning": "强制要求，授权", "mnemonic": "下达命令(mand)" },
+   { "word": "nuance", "phonetic": "/ˈnjuːɑːns/", "meaning": "细微差别", "mnemonic": "一'妞昂斯'之间见差别" },
+   { "word": "optimum", "phonetic": "/ˈɒptɪməm/", "meaning": "最佳的", "mnemonic": "最好的选择(opt)" },
+   { "word": "prevalent", "phonetic": "/ˈprevələnt/", "meaning": "流行的，普遍的", "mnemonic": "到处蔓延(prevail)" },
+   { "word": "vulnerable", "phonetic": "/ˈvʌlnərəbl/", "meaning": "脆弱的", "mnemonic": "挖了防线的'那波人'" }
+  ]
+ },
+ {
+  "id": "hist-11",
+  "date": "第 11 批",
+  "testable": false,
+  "words": [
+   { "word": "acclaim", "phonetic": "/əˈkleɪm/", "meaning": "称赞，喝彩", "mnemonic": "冲你喊好" },
+   { "word": "augment", "phonetic": "/ɔːɡˈment/", "meaning": "增加，扩大，增强", "mnemonic": "让更多(aug)" },
+   { "word": "clarify", "phonetic": "/ˈklærəfaɪ/", "meaning": "澄清，阐明", "mnemonic": "使清楚(clar)" },
+   { "word": "diverse", "phonetic": "/daɪˈvɜːs/", "meaning": "多样的", "mnemonic": "朝不同方向转" },
+   { "word": "ethical", "phonetic": "/ˈeθɪkl/", "meaning": "道德的，伦理的", "mnemonic": "科技伦理题" },
+   { "word": "intrinsic", "phonetic": "/ɪnˈtrɪnsɪk/", "meaning": "内在的，固有的", "mnemonic": "长在里面" },
+   { "word": "legitimate", "phonetic": "/lɪˈdʒɪtɪmət/", "meaning": "合法的，正当的", "mnemonic": "有法可依(leg)" },
+   { "word": "mobility", "phonetic": "/məʊˈbɪləti/", "meaning": "流动性；社会流动", "mnemonic": "能挪动" },
+   { "word": "pessimistic", "phonetic": "/ˌpesɪˈmɪstɪk/", "meaning": "悲观的", "mnemonic": "总往最坏想" },
+   { "word": "subsidize", "phonetic": "/ˈsʌbsɪdaɪz/", "meaning": "补贴，资助", "mnemonic": "在下面托底" }
+  ]
+ },
+ {
+  "id": "hist-12",
+  "date": "第 12 批",
+  "testable": false,
+  "words": [
+   { "word": "accommodate", "phonetic": "/əˈkɒmədeɪt/", "meaning": "容纳；适应；顾及", "mnemonic": "按各人尺度安排(mod)" },
+   { "word": "authentic", "phonetic": "/ɔːˈθentɪk/", "meaning": "真实的，正宗的", "mnemonic": "原汁原味" },
+   { "word": "benign", "phonetic": "/bɪˈnaɪn/", "meaning": "无害的，良性的；温和", "mnemonic": "好+温和(ben)" },
+   { "word": "consensus", "phonetic": "/kənˈsensəs/", "meaning": "共识，一致", "mnemonic": "大家感觉一致" },
+   { "word": "forfeit", "phonetic": "/ˈfɔːfɪt/", "meaning": "丧失，被没收", "mnemonic": "废掉资格" },
+   { "word": "lucrative", "phonetic": "/ˈluːkrətɪv/", "meaning": "赚钱的，有利可图的", "mnemonic": "来钱多(lucr)" },
+   { "word": "oblige", "phonetic": "/əˈblaɪdʒ/", "meaning": "迫使；帮忙(be obliged to)", "mnemonic": "被绑着去做" },
+   { "word": "restrain", "phonetic": "/rɪˈstreɪn/", "meaning": "抑制，克制，约束", "mnemonic": "拉回来(strain)" },
+   { "word": "stagnant", "phonetic": "/ˈstæɡnənt/", "meaning": "停滞的，不景气的", "mnemonic": "一潭死水" },
+   { "word": "undertake", "phonetic": "/ˌʌndəˈteɪk/", "meaning": "承担，从事", "mnemonic": "把担子接过来" }
+  ]
+ },
+ {
+  "id": "hist-13",
+  "date": "第 13 批",
+  "testable": false,
+  "words": [
+   { "word": "abolish", "phonetic": "/əˈbɒlɪʃ/", "meaning": "废除，取消", "mnemonic": "把它抛掉" },
+   { "word": "adhere", "phonetic": "/ədˈhɪə(r)/", "meaning": "坚持，遵守(adhere to)", "mnemonic": "紧紧粘住规矩" },
+   { "word": "confine", "phonetic": "/kənˈfaɪn/", "meaning": "限制，局限于；监禁", "mnemonic": "圈在边界里" },
+   { "word": "discard", "phonetic": "/dɪˈskɑːd/", "meaning": "丢弃，抛弃", "mnemonic": "把卡片扔出去" },
+   { "word": "exert", "phonetic": "/ɪɡˈzɜːt/", "meaning": "施加（影响/压力）；运用", "mnemonic": "一个责他" },
+   { "word": "formidable", "phonetic": "/ˈfɔːmɪdəbl/", "meaning": "强大的，难对付的", "mnemonic": "佛米大波" },
+   { "word": "glimpse", "phonetic": "/ɡlɪmps/", "meaning": "一瞥，瞥见", "mnemonic": "光一闪" },
+   { "word": "hierarchy", "phonetic": "/ˈhaɪərɑːki/", "meaning": "等级制度，层级", "mnemonic": "神圣统治顺序" },
+   { "word": "intervene", "phonetic": "/ˌɪntəˈviːn/", "meaning": "干预，介入(intervene in)", "mnemonic": "走到两方中间" },
+   { "word": "negligible", "phonetic": "/ˈneɡlɪdʒəbl/", "meaning": "微不足道的", "mnemonic": "小到不用选" }
+  ]
+ },
+ {
+  "id": "hist-14",
+  "date": "第 14 批",
+  "testable": false,
+  "words": [
+   { "word": "abrupt", "phonetic": "/əˈbrʌpt/", "meaning": "突然的，唐突的", "mnemonic": "啪地断裂" },
+   { "word": "capacity", "phonetic": "/kəˈpæsəti/", "meaning": "容量；能力", "mnemonic": "能装多少(cap)" },
+   { "word": "disseminate", "phonetic": "/dɪˈsemɪneɪt/", "meaning": "传播，散布（知识）", "mnemonic": "像撒种撒开(semin)" },
+   { "word": "empower", "phonetic": "/ɪmˈpaʊə(r)/", "meaning": "赋权，使能够", "mnemonic": "给人权力" },
+   { "word": "fatigue", "phonetic": "/fəˈtiːɡ/", "meaning": "疲劳", "mnemonic": "乏体格" },
+   { "word": "hinder", "phonetic": "/ˈhɪndə(r)/", "meaning": "阻碍，妨碍", "mnemonic": "被卡住" },
+   { "word": "obstacle", "phonetic": "/ˈɒbstəkl/", "meaning": "障碍", "mnemonic": "站在路对面的东西" },
+   { "word": "pervasive", "phonetic": "/pəˈveɪsɪv/", "meaning": "遍布的，普遍的", "mnemonic": "到处走遍" },
+   { "word": "tolerate", "phonetic": "/ˈtɒləreɪt/", "meaning": "容忍，忍受", "mnemonic": "偷了雷特也得忍" },
+   { "word": "withstand", "phonetic": "/wɪðˈstænd/", "meaning": "承受，抵挡", "mnemonic": "迎着它站着不倒" }
+  ]
+ },
+ {
+  "id": "hist-15",
+  "date": "第 15 批",
+  "testable": false,
+  "words": [
+   { "word": "accountable", "phonetic": "/əˈkaʊntəbl/", "meaning": "负有责任的", "mnemonic": "账要说得清" },
+   { "word": "breach", "phonetic": "/briːtʃ/", "meaning": "违反，破坏；缺口", "mnemonic": "违约" },
+   { "word": "contentious", "phonetic": "/kənˈtenʃəs/", "meaning": "有争议的", "mnemonic": "容易开战" },
+   { "word": "deplete", "phonetic": "/dɪˈpliːt/", "meaning": "耗尽，使枯竭", "mnemonic": "把满的掏空" },
+   { "word": "entail", "phonetic": "/ɪnˈteɪl/", "meaning": "需要，牵涉", "mnemonic": "拖一串尾巴" },
+   { "word": "fundamental", "phonetic": "/ˌfʌndəˈmentl/", "meaning": "根本的，基础的", "mnemonic": "底子层面" },
+   { "word": "immerse", "phonetic": "/ɪˈmɜːs/", "meaning": "沉浸，浸入", "mnemonic": "整个人沉进去" },
+   { "word": "legacy", "phonetic": "/ˈleɡəsi/", "meaning": "遗产，遗留影响", "mnemonic": "传下来的东西" },
+   { "word": "momentum", "phonetic": "/məˈmentəm/", "meaning": "势头，动力", "mnemonic": "瞬间聚集的冲力" },
+   { "word": "outweigh", "phonetic": "/ˌaʊtˈweɪ/", "meaning": "超过，比…更重要", "mnemonic": "称起来更重" }
+  ]
+ },
+ {
+  "id": "hist-16",
+  "date": "第 16 批",
+  "testable": false,
+  "words": [
+   { "word": "benevolent", "phonetic": "/bəˈnevələnt/", "meaning": "仁慈的，乐善好施的", "mnemonic": "心怀好意" },
+   { "word": "cumulative", "phonetic": "/ˈkjuːmjələtɪv/", "meaning": "累积的，渐增的", "mnemonic": "越堆越多" },
+   { "word": "deviate", "phonetic": "/ˈdiːvieɪt/", "meaning": "偏离，背离", "mnemonic": "离开正路" },
+   { "word": "elicit", "phonetic": "/ɪˈlɪsɪt/", "meaning": "引出，诱出（回答）", "mnemonic": "把话勾出来" },
+   { "word": "gauge", "phonetic": "/ɡeɪdʒ/", "meaning": "估量，判断；测量仪", "mnemonic": "嘎吱量体温" },
+   { "word": "impulse", "phonetic": "/ˈɪmpʌls/", "meaning": "冲动；推动力(on impulse)", "mnemonic": "内心一推" },
+   { "word": "notion", "phonetic": "/ˈnəʊʃn/", "meaning": "概念，观念", "mnemonic": "所知的一套想法" },
+   { "word": "redundant", "phonetic": "/rɪˈdʌndənt/", "meaning": "多余的；被裁员的", "mnemonic": "多出来一层" },
+   { "word": "sanction", "phonetic": "/ˈsæŋkʃn/", "meaning": "制裁；批准", "mnemonic": "神圣裁决" },
+   { "word": "yield", "phonetic": "/jiːld/", "meaning": "产生；让步；产量", "mnemonic": "有的收成" }
+  ]
+ },
+ {
+  "id": "hist-17",
+  "date": "第 17 批",
+  "testable": false,
+  "words": [
+   { "word": "abundant", "phonetic": "/əˈbʌndənt/", "meaning": "丰富的，充裕的", "mnemonic": "多到没边" },
+   { "word": "coerce", "phonetic": "/kəʊˈɜːs/", "meaning": "强迫，胁迫(coerce into)", "mnemonic": "一起关起来逼" },
+   { "word": "detect", "phonetic": "/dɪˈtekt/", "meaning": "察觉，检测到", "mnemonic": "揭开盖子发现" },
+   { "word": "endeavor", "phonetic": "/ɪnˈdevə(r)/", "meaning": "努力，尽力", "mnemonic": "咬着硬瓦也干" },
+   { "word": "metaphor", "phonetic": "/ˈmetəfə(r)/", "meaning": "隐喻，比喻", "mnemonic": "把意思搬运过去" },
+   { "word": "persist", "phonetic": "/pəˈsɪst/", "meaning": "坚持，持续存在(persist in)", "mnemonic": "一直站着不退" },
+   { "word": "quota", "phonetic": "/ˈkwəʊtə/", "meaning": "配额，定额", "mnemonic": "规定多少" },
+   { "word": "simulate", "phonetic": "/ˈsɪmjuleɪt/", "meaning": "模拟，仿真", "mnemonic": "做出相同场景" },
+   { "word": "tedious", "phonetic": "/ˈtiːdiəs/", "meaning": "冗长乏味的", "mnemonic": "提着地拖太久" },
+   { "word": "wholesome", "phonetic": "/ˈhəʊlsəm/", "meaning": "有益健康的", "mnemonic": "让人整体健康" }
+  ]
+ },
+ {
+  "id": "hist-18",
+  "date": "第 18 批",
+  "testable": false,
+  "words": [
+   { "word": "adversity", "phonetic": "/ədˈvɜːsəti/", "meaning": "逆境，困境", "mnemonic": "命运转过来对着你" },
+   { "word": "burden", "phonetic": "/ˈbɜːdn/", "meaning": "负担，重担", "mnemonic": "背着笨重的担子" },
+   { "word": "conceive", "phonetic": "/kənˈsiːv/", "meaning": "构想，设想；怀孕", "mnemonic": "把想法拿进脑中" },
+   { "word": "demolish", "phonetic": "/dɪˈmɒlɪʃ/", "meaning": "拆除，摧毁", "mnemonic": "磨成平地" },
+   { "word": "foresee", "phonetic": "/fɔːˈsiː/", "meaning": "预见，预知", "mnemonic": "提前看见" },
+   { "word": "hygiene", "phonetic": "/ˈhaɪdʒiːn/", "meaning": "卫生", "mnemonic": "孩只能→讲卫生" },
+   { "word": "mandatory", "phonetic": "/ˈmændətəri/", "meaning": "强制的，法定的", "mnemonic": "命令必须(mand)" },
+   { "word": "plight", "phonetic": "/plaɪt/", "meaning": "困境，苦难处境", "mnemonic": "扑倒狼狈" },
+   { "word": "testify", "phonetic": "/ˈtestɪfaɪ/", "meaning": "作证；证明(testify to)", "mnemonic": "拿出证据说话" },
+   { "word": "welfare", "phonetic": "/ˈwelfeə(r)/", "meaning": "福利，福祉", "mnemonic": "往好处走" }
+  ]
+ },
+ {
+  "id": "hist-19",
+  "date": "第 19 批",
+  "testable": false,
+  "words": [
+   { "word": "amid", "phonetic": "/əˈmɪd/", "meaning": "在…之中", "mnemonic": "处于中间" },
+   { "word": "captivate", "phonetic": "/ˈkæptɪveɪt/", "meaning": "迷住，使着迷", "mnemonic": "一把抓住心" },
+   { "word": "diligent", "phonetic": "/ˈdɪlɪdʒənt/", "meaning": "勤奋的", "mnemonic": "地里真特干活" },
+   { "word": "erode", "phonetic": "/ɪˈrəʊd/", "meaning": "侵蚀；逐渐削弱", "mnemonic": "一点点咬掉" },
+   { "word": "hazard", "phonetic": "/ˈhæzəd/", "meaning": "危险，隐患", "mnemonic": "害灾的" },
+   { "word": "merge", "phonetic": "/mɜːdʒ/", "meaning": "合并，融合", "mnemonic": "并成一家" },
+   { "word": "obligation", "phonetic": "/ˌɒblɪˈɡeɪʃn/", "meaning": "义务，责任", "mnemonic": "被要求的事" },
+   { "word": "preserve", "phonetic": "/prɪˈzɜːv/", "meaning": "保护，保存", "mnemonic": "提前留着" },
+   { "word": "transient", "phonetic": "/ˈtrænziənt/", "meaning": "短暂的", "mnemonic": "一穿而过" },
+   { "word": "zeal", "phonetic": "/ziːl/", "meaning": "热情，热忱", "mnemonic": "热情得像个贼" }
+  ]
+ },
+ {
+  "id": "hist-20",
+  "date": "第 20 批",
+  "testable": false,
+  "words": [
+   { "word": "abstract", "phonetic": "/ˈæbstrækt/", "meaning": "抽象的；摘要", "mnemonic": "从具体中拉出来" },
+   { "word": "comply", "phonetic": "/kəmˈplaɪ/", "meaning": "遵守，服从(comply with)", "mnemonic": "跟着规矩折" },
+   { "word": "disrupt", "phonetic": "/dɪsˈrʌpt/", "meaning": "扰乱，中断，颠覆", "mnemonic": "拦腰打断" },
+   { "word": "fabricate", "phonetic": "/ˈfæbrɪkeɪt/", "meaning": "编造；制造", "mnemonic": "像织布一样织出来" },
+   { "word": "multiply", "phonetic": "/ˈmʌltɪplaɪ/", "meaning": "增加，繁殖", "mnemonic": "变多" },
+   { "word": "postpone", "phonetic": "/pəˈspəʊn/", "meaning": "推迟，延期", "mnemonic": "往后放" },
+   { "word": "refute", "phonetic": "/rɪˈfjuːt/", "meaning": "反驳，驳斥", "mnemonic": "打回去" },
+   { "word": "segregate", "phonetic": "/ˈseɡrɪɡeɪt/", "meaning": "隔离，分离", "mnemonic": "把群分开" },
+   { "word": "unanimous", "phonetic": "/juˈnænɪməs/", "meaning": "全体一致的", "mnemonic": "一条心" },
+   { "word": "withhold", "phonetic": "/wɪðˈhəʊld/", "meaning": "拒绝给予；隐瞒", "mnemonic": "拿住不放" }
+  ]
+ },
+ {
+  "id": "hist-21",
+  "date": "第 21 批",
+  "testable": false,
+  "words": [
+   { "word": "adaptation", "phonetic": "/ˌædæpˈteɪʃn/", "meaning": "适应；改编", "mnemonic": "调整后贴合环境" },
+   { "word": "clarity", "phonetic": "/ˈklærəti/", "meaning": "清晰，明确", "mnemonic": "清楚的状态" },
+   { "word": "deliberate", "phonetic": "/dɪˈlɪbərət/", "meaning": "故意的；审慎的", "mnemonic": "称量再三" },
+   { "word": "efficiency", "phonetic": "/ɪˈfɪʃnsi/", "meaning": "效率", "mnemonic": "做出的产出比" },
+   { "word": "integrity", "phonetic": "/ɪnˈteɡrəti/", "meaning": "正直；完整", "mnemonic": "完整不被碰坏" },
+   { "word": "novel", "phonetic": "/ˈnɒvl/", "meaning": "新颖的", "mnemonic": "引入新东西(nov)" },
+   { "word": "perseverance", "phonetic": "/ˌpɜːsɪˈvɪərəns/", "meaning": "坚持不懈，毅力", "mnemonic": "一直严格做下去" },
+   { "word": "remedy", "phonetic": "/ˈremədi/", "meaning": "补救办法；药物", "mnemonic": "再治一次" },
+   { "word": "tackle", "phonetic": "/ˈtækl/", "meaning": "处理，解决（问题）", "mnemonic": "太抠手要解决" },
+   { "word": "warrant", "phonetic": "/ˈwɒrənt/", "meaning": "使有必要；依据", "mnemonic": "情况够份量特值得做" }
+  ]
+ },
+ {
+  "id": "hist-22",
+  "date": "第 22 批",
+  "testable": false,
+  "words": [
+   { "word": "assert", "phonetic": "/əˈsɜːt/", "meaning": "断言；维护（权利）", "mnemonic": "把观点牢牢接住" },
+   { "word": "cohesion", "phonetic": "/kəʊˈhiːʒn/", "meaning": "凝聚力，团结", "mnemonic": "粘在一起" },
+   { "word": "disparity", "phonetic": "/dɪˈspærəti/", "meaning": "差距，不平等", "mnemonic": "不相等" },
+   { "word": "equitable", "phonetic": "/ˈekwɪtəbl/", "meaning": "公平的，公正的", "mnemonic": "人人相等" },
+   { "word": "induce", "phonetic": "/ɪnˈdjuːs/", "meaning": "引起，诱导", "mnemonic": "引进来" },
+   { "word": "longevity", "phonetic": "/lɒnˈdʒevəti/", "meaning": "长寿，持久", "mnemonic": "活得时间很长" },
+   { "word": "proximity", "phonetic": "/prɒkˈsɪməti/", "meaning": "接近，邻近", "mnemonic": "靠得近" },
+   { "word": "reluctant", "phonetic": "/rɪˈlʌktənt/", "meaning": "不情愿的", "mnemonic": "内心挣扎不想去" },
+   { "word": "venture", "phonetic": "/ˈventʃə(r)/", "meaning": "冒险事业；冒险", "mnemonic": "敢问路" },
+   { "word": "zealous", "phonetic": "/ˈzeləs/", "meaning": "热心的，热情的", "mnemonic": "满含热情" }
+  ]
+ },
+ {
+  "id": "hist-23",
+  "date": "第 23 批",
+  "testable": false,
+  "words": [
+   { "word": "apt", "phonetic": "/æpt/", "meaning": "易于…的；恰当的", "mnemonic": "一扑就中" },
+   { "word": "bureaucracy", "phonetic": "/bjʊəˈrɒkrəsi/", "meaning": "官僚机构，官僚作风", "mnemonic": "桌子式统治" },
+   { "word": "disclose", "phonetic": "/dɪsˈkləʊz/", "meaning": "披露，公开", "mnemonic": "把关着的打开" },
+   { "word": "emulate", "phonetic": "/ˈemjuleɪt/", "meaning": "效仿，模仿", "mnemonic": "因爱慕而雷同" },
+   { "word": "intrigue", "phonetic": "/ɪnˈtriːɡ/", "meaning": "激起兴趣", "mnemonic": "因翠绿的格太奇特" },
+   { "word": "magnitude", "phonetic": "/ˈmæɡnɪtjuːd/", "meaning": "巨大；规模，程度", "mnemonic": "大的程度" },
+   { "word": "proponent", "phonetic": "/prəˈpəʊnənt/", "meaning": "支持者，倡导者", "mnemonic": "站在赞成那边" },
+   { "word": "rigid", "phonetic": "/ˈrɪdʒɪd/", "meaning": "僵化的；刚硬的", "mnemonic": "一点都里急不动" },
+   { "word": "subsidy", "phonetic": "/ˈsʌbsədi/", "meaning": "补贴，津贴", "mnemonic": "坐在下面托着" },
+   { "word": "wane", "phonetic": "/weɪn/", "meaning": "减弱，衰退", "mnemonic": "月盈则亏" }
+  ]
+ },
+ {
+  "id": "hist-24",
+  "date": "第 24 批",
+  "testable": false,
+  "words": [
+   { "word": "baffle", "phonetic": "/ˈbæfl/", "meaning": "使困惑", "mnemonic": "想了也白否" },
+   { "word": "bleak", "phonetic": "/bliːk/", "meaning": "黯淡的，无望的", "mnemonic": "看不到立即好转" },
+   { "word": "dwindle", "phonetic": "/ˈdwɪndl/", "meaning": "减少，缩小", "mnemonic": "滴答滴答变少" },
+   { "word": "encompass", "phonetic": "/ɪnˈkʌmpəs/", "meaning": "包含，涵盖", "mnemonic": "圈进罗盘范围" },
+   { "word": "inflate", "phonetic": "/ɪnˈfleɪt/", "meaning": "膨胀；夸大", "mnemonic": "往里吹气" },
+   { "word": "loom", "phonetic": "/luːm/", "meaning": "逼近，赫然显现", "mnemonic": "阴影像鲁莽的木桩逼过来" },
+   { "word": "plummet", "phonetic": "/ˈplʌmɪt/", "meaning": "暴跌，骤降", "mnemonic": "扑地掉下来" },
+   { "word": "replenish", "phonetic": "/rɪˈplenɪʃ/", "meaning": "补充，重新填满", "mnemonic": "再填满" },
+   { "word": "scarce", "phonetic": "/skeəs/", "meaning": "稀缺的", "mnemonic": "死卡死" },
+   { "word": "turbulent", "phonetic": "/ˈtɜːbjələnt/", "meaning": "动荡的，混乱的", "mnemonic": "特别欧冷战期" }
+  ]
+ },
+ {
+  "id": "hist-25",
+  "date": "第 25 批",
+  "testable": false,
+  "words": [
+   { "word": "allege", "phonetic": "/əˈledʒ/", "meaning": "声称，断言（未经证实）", "mnemonic": "在法庭上宣称" },
+   { "word": "delegate", "phonetic": "/ˈdelɪɡeɪt/", "meaning": "委派，授权；代表", "mnemonic": "往下派人" },
+   { "word": "imminent", "phonetic": "/ˈɪmɪnənt/", "meaning": "即将发生的，迫近的", "mnemonic": "一分钟内特快到" },
+   { "word": "notable", "phonetic": "/ˈnəʊtəbl/", "meaning": "显著的，值得注意的", "mnemonic": "值得记一笔" },
+   { "word": "overturn", "phonetic": "/ˌəʊvəˈtɜːn/", "meaning": "推翻，颠覆", "mnemonic": "整个翻过来" },
+   { "word": "pioneer", "phonetic": "/ˌpaɪəˈnɪə(r)/", "meaning": "开创；先驱", "mnemonic": "第一批派出去的欧洲人" },
+   { "word": "revere", "phonetic": "/rɪˈvɪə(r)/", "meaning": "尊敬，崇敬", "mnemonic": "反复敬畏" },
+   { "word": "serene", "phonetic": "/səˈriːn/", "meaning": "宁静的，平静的", "mnemonic": "色泽润和" },
+   { "word": "subsequent", "phonetic": "/ˈsʌbsɪkwənt/", "meaning": "随后的，后来的", "mnemonic": "跟在后面" },
+   { "word": "wary", "phonetic": "/ˈweəri/", "meaning": "谨慎的，警惕的", "mnemonic": "为安全瑞谨慎" }
+  ]
+ },
+ {
+  "id": "hist-26",
+  "date": "第 26 批",
+  "testable": false,
+  "words": [
+   { "word": "adept", "phonetic": "/əˈdept/", "meaning": "熟练的，擅长的", "mnemonic": "部门里的专家" },
+   { "word": "dubious", "phonetic": "/ˈdjuːbiəs/", "meaning": "可疑的，靠不住的", "mnemonic": "证据丢了就逼死人" },
+   { "word": "elusive", "phonetic": "/ɪˈluːsɪv/", "meaning": "难以捉摸的", "mnemonic": "溜走抓不住" },
+   { "word": "frugal", "phonetic": "/ˈfruːɡl/", "meaning": "节俭的", "mnemonic": "吃腐乳的狗很省" },
+   { "word": "hostile", "phonetic": "/ˈhɒstaɪl/", "meaning": "敌对的", "mnemonic": "当敌人对待" },
+   { "word": "mediocre", "phonetic": "/ˌmiːdiˈəʊkə(r)/", "meaning": "平庸的，普通的", "mnemonic": "卡在中间不上不下" },
+   { "word": "prosper", "phonetic": "/ˈprɒspə(r)/", "meaning": "繁荣，兴旺", "mnemonic": "往希望走" },
+   { "word": "speculate", "phonetic": "/ˈspekjuleɪt/", "meaning": "推测；投机", "mnemonic": "看着猜" },
+   { "word": "trivial", "phonetic": "/ˈtrɪviəl/", "meaning": "琐碎的，微不足道的", "mnemonic": "三条路都能走的小事" },
+   { "word": "undergo", "phonetic": "/ˌʌndəˈɡəʊ/", "meaning": "经历，经受", "mnemonic": "从下面走过去" }
+  ]
+ },
+ {
+  "id": "2026-10-10",
+  "date": "2026-10-10",
+  "testable": true,
+  "words": [
+   { "word": "persuade", "phonetic": "/pəˈsweɪd/", "meaning": "说服，劝说", "example": "Advertisers often use emotional images to persuade consumers to buy their products.（广告商常用情感画面说服消费者购买产品。）", "mnemonic": "per(彻底)+suade(劝)；劝到底=说服" },
+   { "word": "influential", "phonetic": "/ˌɪnfluˈenʃl/", "meaning": "有影响力的", "example": "Social media influencers have become highly influential in shaping young people's spending habits.（社交媒体网红在塑造年轻人消费习惯方面极具影响力。）", "mnemonic": "in+flu(流)+ential；影响力像流感流进人心" },
+   { "word": "audience", "phonetic": "/ˈɔːdiəns/", "meaning": "受众，观众，读者群", "example": "Television programmes are designed to appeal to a wide audience.（电视节目被设计来吸引广泛的受众。）", "mnemonic": "audi(听)+ence；听的人=观众" },
+   { "word": "exaggerate", "phonetic": "/ɪɡˈzædʒəreɪt/", "meaning": "夸大，夸张", "example": "Some adverts exaggerate the benefits of their products, which misleads consumers.（一些广告夸大产品功效，误导消费者。）", "mnemonic": "ex(超出)+agger(堆积)；堆过头=夸大" },
+   { "word": "survey", "phonetic": "/ˈsɜːveɪ/", "meaning": "调查", "example": "A recent survey showed that more than 60% of teenagers spend over three hours online every day.（最近一项调查显示，超过60%的青少年每天上网超过三小时。）", "mnemonic": "sur(上面)+vey(看)；从上往下看全貌=调查" },
+   { "word": "promote", "phonetic": "/prəˈməʊt/", "meaning": "推广，促进；晋升", "example": "The government should promote healthy eating habits through school education.（政府应通过学校教育推广健康饮食习惯。）", "mnemonic": "pro(向前)+mote(移动)；往前推=促进" },
+   { "word": "deceive", "phonetic": "/dɪˈsiːv/", "meaning": "欺骗，蒙蔽", "example": "Consumers may be deceived by false advertising claims.（消费者可能被虚假广告宣称所欺骗。）", "mnemonic": "de(下)+ceive(拿)；偷偷往下拿=骗走" },
+   { "word": "trend", "phonetic": "/trend/", "meaning": "趋势，潮流", "example": "There is an upward trend in the number of people working from home.（在家办公的人数呈上升趋势。）", "mnemonic": "谐音踹的；踹一脚的方向=趋势" },
+   { "word": "advertise", "phonetic": "/ˈædvətaɪz/", "meaning": "做广告，宣传", "example": "Companies advertise on social media to reach younger customers.（公司在社交媒体上做广告以触达年轻客户。）", "mnemonic": "ad(向)+vert(转)+ise；把注意力转向你=广告" },
+   { "word": "celebrity", "phonetic": "/səˈlebrəti/", "meaning": "名人，明星", "example": "Many teenagers want to become celebrities because they envy their fame and fortune.（许多青少年想成为名人，因为他们羡慕其名利。）", "mnemonic": "celebrate(庆祝)的亲戚；被大家庆祝的人=名人" }
+  ]
+ }
+];
+
+const LS_WRONG = 'ielts_wrong';
+const LS_TESTED = 'ielts_tested';
+
+function lsLoad(key, def){
+  try{ const v = JSON.parse(localStorage.getItem(key)); return v === null || v === undefined ? def : v; }
+  catch(e){ return def; }
+}
+function lsSave(key, val){ try{ localStorage.setItem(key, JSON.stringify(val)); }catch(e){} }
+
+function getWrong(){ return lsLoad(LS_WRONG, []); }
+function addWrong(word){
+  const w = getWrong();
+  if(!w.includes(word)){ w.push(word); lsSave(LS_WRONG, w); }
+}
+function removeWrong(word){
+  const w = getWrong().filter(x => x !== word);
+  lsSave(LS_WRONG, w);
+}
+function getTested(){ return lsLoad(LS_TESTED, []); }
+function markTested(batchId){
+  const t = getTested();
+  if(!t.includes(batchId)){ t.push(batchId); lsSave(LS_TESTED, t); }
+}
+function getNextTestBatch(){
+  const tested = getTested();
+  for(let i = BATCHES.length - 1; i >= 0; i--){
+    const b = BATCHES[i];
+    if(b.testable && !tested.includes(b.id)) return b;
+  }
+  return null;
+}
+function findWord(word){
+  for(const b of BATCHES){
+    for(const w of b.words){
+      if(w.word === word) return w;
+    }
+  }
+  return null;
+}
+function allWords(){
+  const out = [];
+  for(const b of BATCHES) out.push(...b.words);
+  return out;
+}
+
+window.IELTSApp = {
+  BATCHES, getWrong, addWrong, removeWrong, getTested, markTested,
+  getNextTestBatch, findWord, allWords, lsLoad, lsSave
+};
+
+function exportData(){
+  const data = { wrong: getWrong(), tested: getTested(), exportedAt: new Date().toISOString() };
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'ielts-backup-' + new Date().toISOString().slice(0,10) + '.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+function importData(ev){
+  const file = ev.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e){
+    try{
+      const data = JSON.parse(e.target.result);
+      let addedW = 0, addedT = 0;
+      if(Array.isArray(data.wrong)) data.wrong.forEach(w => { if(!getWrong().includes(w)){ addWrong(w); addedW++; } });
+      if(Array.isArray(data.tested)) data.tested.forEach(t => { if(!getTested().includes(t)){ markTested(t); addedT++; } });
+      renderErrors(); renderTest();
+      alert('导入成功：合并错词 +' + addedW + ' 个，已测批次 +' + addedT + ' 个\n当前错词共 ' + getWrong().length + ' 个');
+    }catch(err){ alert('导入失败：文件格式不对'); }
+  };
+  reader.readAsText(file);
+  ev.target.value = '';
+}
+
+const $ = id => document.getElementById(id);
+let currentTab = 'new';
+let testBatch = null, testIdx = 0, testRevealed = false, testResult = null, testDone = false;
+
+function switchTab(name){
+  currentTab = name;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.panel === name));
+  document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === 'panel-' + name));
+  if(name === 'new') renderBatches();
+  if(name === 'test') renderTest();
+  if(name === 'err') renderErrors();
+}
+document.querySelectorAll('.tab-btn').forEach(b => b.onclick = () => switchTab(b.dataset.panel));
+
+function updateCounts(){
+  const errN = getWrong().length;
+  $('cnt-new').textContent = allWords().length + ' 词';
+  $('cnt-err').textContent = errN + ' 词';
+  const nb = getNextTestBatch();
+  $('cnt-test').textContent = nb ? nb.words.length + ' 词待测' : '无';
+  $('err-num').textContent = errN;
+  $('err-empty').style.display = errN ? 'none' : 'block';
+}
+
+function renderBatches(){
+  const box = $('batch-list');
+  box.innerHTML = '';
+  for(let i = BATCHES.length - 1; i >= 0; i--){
+    const b = BATCHES[i];
+    const isNew = b.testable;
+    const div = document.createElement('div');
+    div.className = 'batch' + (i === BATCHES.length - 1 ? ' open' : '');
+    let rows = '';
+    for(const w of b.words){
+      rows += '<div class="w-row">' +
+        '<div class="w">' + esc(w.word) +
+          '<span class="ph">' + esc(w.phonetic || '') + '</span>' +
+          (w.mnemonic ? '<span class="mn">💡 ' + esc(w.mnemonic) + '</span>' : '') +
+        '</div>' +
+        '<div class="def">' + esc(w.meaning) +
+          (w.example ? '<span class="ex">' + esc(w.example) + '</span>' : '') +
+        '</div></div>';
+    }
+    div.innerHTML =
+      '<div class="batch-head"><span class="date">' + esc(b.date) +
+        (isNew ? ' · 新' : '') + '</span>' +
+        '<span class="meta">' + b.words.length + ' 词</span>' +
+        '<span class="arrow">▼</span></div>' +
+      '<div class="batch-body">' + rows + '</div>';
+    div.querySelector('.batch-head').onclick = () => div.classList.toggle('open');
+    box.appendChild(div);
+  }
+}
+
+function renderTest(){
+  const box = $('test-box');
+  const nb = getNextTestBatch();
+  if(!nb){
+    box.innerHTML = '<div class="test-empty"><b>暂无待测批次</b>今晚 20:00 推送新词后，明天上午即可在这里测试。</div>';
+    updateCounts();
+    return;
+  }
+  testBatch = nb; testIdx = 0; testRevealed = false; testResult = null; testDone = false;
+  drawTestCard();
+}
+
+function drawTestCard(){
+  const box = $('test-box');
+  const b = testBatch;
+  const w = b.words[testIdx];
+  if(testDone){
+    box.innerHTML = '<div class="test-done">✅ 今日 Test 完成：共 ' + b.words.length + ' 词，<span style="color:var(--err)">' + testResult.miss + ' 个进入错题集</span>。' +
+      '<br><br><button class="tbtn reveal" onclick="switchTab(\'err\')">去错题集看看</button>' +
+      ' <button class="tbtn got" onclick="renderTest()">再测一遍</button></div>';
+    updateCounts();
+    return;
+  }
+  box.innerHTML =
+    '<div class="test-progress">第 ' + (testIdx + 1) + ' / ' + b.words.length + ' 词 · 批次 ' + esc(b.date) + '</div>' +
+    '<div class="test-word">' + esc(w.word) + '</div>' +
+    (testRevealed ? '<div class="test-ph">' + esc(w.phonetic || '') + '</div>' : '<div class="test-ph">看英文，想中文</div>') +
+    '<div class="test-detail' + (testRevealed ? ' show' : '') + '">' +
+      '<div><span class="lbl">音标</span>' + esc(w.phonetic || '') + '</div>' +
+      '<div><span class="lbl">词义</span>' + esc(w.meaning) + '</div>' +
+      '<div><span class="lbl">例句</span>' + esc(w.example || w.mnemonic || '') + '</div>' +
+    '</div>' +
+    (testRevealed
+      ? '<div class="test-btns"><button class="tbtn got" onclick="testAnswer(true)">记住了</button><button class="tbtn miss" onclick="testAnswer(false)">还是没记住</button></div>'
+      : '<div class="test-btns"><button class="tbtn got" onclick="testAnswer(true)">想出来了</button><button class="tbtn miss" onclick="testAnswer(false)">没记住</button><button class="tbtn reveal" onclick="testReveal()">显示答案</button></div>');
+}
+
+function testReveal(){ testRevealed = true; drawTestCard(); }
+
+function testAnswer(got){
+  const b = testBatch, w = b.words[testIdx];
+  if(!got) addWrong(w.word);
+  testResult = testResult || { miss: 0 };
+  if(!got) testResult.miss++;
+  testIdx++;
+  if(testIdx >= b.words.length){
+    testDone = true;
+    markTested(b.id);
+    drawTestCard();
+  } else {
+    testRevealed = false;
+    drawTestCard();
+  }
+}
+
+function renderErrors(){
+  const list = $('err-list');
+  list.innerHTML = '';
+  const wrong = getWrong();
+  for(const word of wrong){
+    const w = findWord(word);
+    if(!w) continue;
+    const row = document.createElement('div');
+    row.innerHTML =
+      '<div class="e-row"><input type="checkbox" data-word="' + esc(w.word) + '">' +
+      '<span class="e-word">' + esc(w.word) + '</span>' +
+      '<button class="e-expand">展开 ▾</button></div>' +
+      '<div class="e-detail">' +
+        '<div><span class="lbl">音标</span>' + esc(w.phonetic || '') + '</div>' +
+        '<div><span class="lbl">词义</span>' + esc(w.meaning) + '</div>' +
+        '<div><span class="lbl">例句</span>' + esc(w.example || w.mnemonic || '') + '</div>' +
+      '</div>';
+    row.querySelector('input').onchange = function(){
+      removeWrong(w.word);
+      renderErrors(); updateCounts();
+    };
+    row.querySelector('.e-expand').onclick = function(){
+      const d = row.querySelector('.e-detail');
+      d.classList.toggle('show');
+      this.textContent = d.classList.contains('show') ? '收起 ▴' : '展开 ▾';
+    };
+    list.appendChild(row);
+  }
+  updateCounts();
+}
+
+function esc(s){
+  return String(s === undefined || s === null ? '' : s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+renderBatches();
+renderTest();
+renderErrors();
+</script>
+</body>
+</html>
