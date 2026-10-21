@@ -83,30 +83,33 @@ const BATCHES=[
 {word:"inevitable",phonetic:"/ɪnˈevɪtəbl/",meaning:"不可避免的",mnemonic:"避不开的"},
 {word:"affluent",phonetic:"/ˈæfluənt/",meaning:"富裕的",mnemonic:"钱如流水"},
 {word:"exacerbate",phonetic:"/ɪɡˈzæsəbeɪt/",meaning:"使恶化，加剧",mnemonic:"弄得更尖锐(acerb)"},
-{word:"paradigm",phonetic:"/ˈpærədaɪm/",meaning:"范式，模式",mnemonic:"放旁边给人看的示范"]}]},
-{id:"hist-02",date:"第 2 批",testable:false,words:[
-{word:"alleviate",phonetic:"/əˈliːvieɪt/",meaning:"减轻，缓解",mnemonic:"负担变轻(levi)"},
-{word:"indispensable",phonetic:"/ˌɪndɪˈspensəbl/",meaning:"不可或缺的",mnemonic:"省不掉的"},
-{word:"escalate",phonetic:"/ˈeskəleɪt/",meaning:"升级，加剧",mnemonic:"越吵越凶"},
-{word:"discrepancy",phonetic:"/dɪsˈkrepənsi/",meaning:"差异，不一致",mnemonic:"对不上咔哒响"},
-{word:"holistic",phonetic:"/həˈlɪstɪk/",meaning:"整体的，全面的",mnemonic:"whole 整体观"},
-{word:"jeopardize",phonetic:"/ˈdʒepədaɪz/",meaning:"危及，损害",mnemonic:"节拍带死→节奏乱全盘输"},
-{word:"meticulous",phonetic:"/məˈtɪkjələs/",meaning:"一丝不苟的",mnemonic:"没细节可漏"},
-{word:"obsolete",phonetic:"/ˈɒbsəliːt/",meaning:"过时的，被淘汰的",mnemonic:"不再使用"},
-{word:"pragmatic",phonetic:"/præɡˈmætɪk/",meaning:"务实的",mnemonic:"讲实际动手"},
-{word:"thrive",phonetic:"/θraɪv/",meaning:"繁荣，茁壮成长",mnemonic:"心脏强有力地跳"}]}],
-{id:"2026-10-22",date:"2026-10-22",testable:true,words:[
-{word:"anxiety",phonetic:"/æŋˈzaɪəti/",meaning:"焦虑，忧虑",example:"Many students experience intense anxiety before important exams.（许多学生在重要考试前会感到强烈焦虑。）",mnemonic:"anx(紧)+iety；心里紧成一团=焦虑"},
-{word:"motivation",phonetic:"/ˌməʊtɪˈveɪʃn/",meaning:"动力，积极性",example:"A clear sense of purpose is the strongest motivation for long-term learning.（明确的目标感是长期学习最强的动力。）",mnemonic:"mot(动)+ivation；推动你前进的力量=动力"},
-{word:"confidence",phonetic:"/ˈkɒnfɪdəns/",meaning:"自信，信心",example:"Speaking English regularly helps learners build confidence over time.（定期说英语能帮助学习者逐渐建立自信。）",mnemonic:"con+fid(信任)+ence；相信自己=自信"},
-{word:"frustration",phonetic:"/frʌˈstreɪʃn/",meaning:"挫败感，沮丧",example:"Learning a new language often involves moments of frustration before progress is visible.（学一门新语言在进步显现之前往往会经历挫败的时刻。）",mnemonic:"frustr(挫败)+ation；想达成却受阻=挫败感"},
-{word:"empathy",phonetic:"/ˈempəθi/",meaning:"共情，同理心",example:"Good teachers show empathy when students struggle with difficult concepts.（当学生难以理解概念时，好老师会表现出同理心。）",mnemonic:"em(进入)+path(感情)+y；走进别人的感情=共情"},
-{word:"overwhelm",phonetic:"/ˌəʊvəˈwelm/",meaning:"使不知所措，压垮",example:"The amount of information online can overwhelm anyone trying to study efficiently.（网上信息量之大，足以让任何想高效学习的人不知所措。）",mnemonic:"over(过度)+whelm(淹没)；被信息淹没=不知所措"},
-{word:"depression",phonetic:"/dɪˈpreʃn/",meaning:"抑郁，沮丧",example:"Prolonged loneliness and stress can contribute to clinical depression.（长期孤独和压力可能导致临床抑郁症。）",mnemonic:"de(向下)+press(压)+ion；心情被往下压=抑郁"},
-{word:"contentment",phonetic:"/kənˈtentmənt/",meaning:"满足，知足",example:"True contentment comes from appreciating what one already has rather than chasing more.（真正的满足来自珍惜已拥有的，而不是追逐更多。）",mnemonic:"content(满足的)+ment；心里被填满=满足"},
-{word:"extrovert",phonetic:"/ˈekstrəvɜːt/",meaning:"外向的人",example:"Extroverts often recharge their energy by being around other people.（外向的人通常通过与人相处来恢复精力。）",mnemonic:"extro(向外)+vert(转)；注意力转向外部=外向者"},
-{word:"introvert",phonetic:"/ˈɪntrəvɜːt/",meaning:"内向的人",example:"Introverts may prefer deep one-on-one conversations over large social gatherings.（内向者可能更喜欢深入的一对一交谈，而不是大型社交聚会。）",mnemonic:"intro(向内)+vert(转)；注意力转向内部=内向者"}]}];
+{word:"paradigm",phonetic:"/ˈpærədaɪm/",meaning:"范式，模式",mnemonic:"放旁边给人看的示范"}]}];
 const LS_WRONG='ielts_wrong',LS_TESTED='ielts_tested';
+function lsLoad(k,d){try{const v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
+function lsSave(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+function getWrong(){return lsLoad(LS_WRONG,[])}
+function addWrong(w){const a=getWrong();if(!a.includes(w)){a.push(w);lsSave(LS_WRONG,a)}}
+function removeWrong(w){lsSave(LS_WRONG,getWrong().filter(x=>x!==w))}
+function getTested(){return lsLoad(LS_TESTED,[])}
+function markTested(id){const t=getTested();if(!t.includes(id)){t.push(id);lsSave(LS_TESTED,t)}}
+function getNextTestBatch(){const t=getTested();for(let i=BATCHES.length-1;i>=0;i--){const b=BATCHES[i];if(b.testable&&!t.includes(b.id))return b}return null}
+function findWord(w){for(const b of BATCHES)for(const x of b.words)if(x.word===w)return x;return null}
+function allWords(){const o=[];for(const b of BATCHES)o.push(...b.words);return o}
+window.IELTSApp={BATCHES,getWrong,addWrong,removeWrong,getTested,markTested,getNextTestBatch,findWord,allWords,lsLoad,lsSave};
+function exportData(){const d={wrong:getWrong(),tested:getTested(),exportedAt:new Date().toISOString()};const b=new Blob([JSON.stringify(d,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='ielts-backup-'+new Date().toISOString().slice(0,10)+'.json';a.click();URL.revokeObjectURL(a.href)}
+function importData(ev){const f=ev.target.files[0];if(!f)return;const r=new FileReader();r.onload=function(e){try{const d=JSON.parse(e.target.result);let aw=0,at=0;if(Array.isArray(d.wrong))d.wrong.forEach(w=>{if(!getWrong().includes(w)){addWrong(w);aw++}});if(Array.isArray(d.tested))d.tested.forEach(t=>{if(!getTested().includes(t)){markTested(t);at++}});renderErrors();renderTest();alert('导入成功：合并错词 +'+aw+' 个，已测批次 +'+at+' 个\n当前错词共 '+getWrong().length+' 个')}catch(err){alert('导入失败：文件格式不对')}};r.readAsText(f);ev.target.value=''}
+const $=id=>document.getElementById(id);
+let testBatch=null,testIdx=0,testRevealed=false,testResult=null,testDone=false;
+function switchTab(n){document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active',b.dataset.panel===n));document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',p.id==='panel-'+n));if(n==='new')renderBatches();if(n==='test')renderTest();if(n==='err')renderErrors()}
+document.querySelectorAll('.tab-btn').forEach(b=>b.onclick=()=>switchTab(b.dataset.panel));
+function updateCounts(){const e=getWrong().length;$('cnt-new').textContent=allWords().length+' 词';$('cnt-err').textContent=e+' 词';const nb=getNextTestBatch();$('cnt-test').textContent=nb?nb.words.length+' 词待测':'无';$('err-num').textContent=e;$('err-empty').style.display=e?'none':'block'}
+function renderBatches(){const box=$('batch-list');box.innerHTML='';for(let i=BATCHES.length-1;i>=0;i--){const b=BATCHES[i];const d=document.createElement('div');d.className='batch'+(i===BATCHES.length-1?' open':'');let rows='';for(const w of b.words){rows+='<div class="w-row"><div class="w">'+esc(w.word)+'<span class="ph">'+esc(w.phonetic||'')+'</span>'+(w.mnemonic?'<span class="mn">💡 '+esc(w.mnemonic)+'</span>':'')+'</div><div class="def">'+esc(w.meaning)+(w.example?'<span class="ex">'+esc(w.example)+'</span>':'')+'</div></div>'}d.innerHTML='<div class="batch-head"><span class="date">'+esc(b.date)+(b.testable?' · 新':'')+'</span><span class="meta">'+b.words.length+' 词</span><span class="arrow">▼</span></div><div class="batch-body">'+rows+'</div>';d.querySelector('.batch-head').onclick=()=>d.classList.toggle('open');box.appendChild(d)}}
+function renderTest(){const box=$('test-box');const nb=getNextTestBatch();if(!nb){box.innerHTML='<div class="test-empty"><b>暂无待测批次</b>今晚 20:00 推送新词后，明天上午即可在这里测试。</div>';updateCounts();return}testBatch=nb;testIdx=0;testRevealed=false;testResult=null;testDone=false;drawTestCard()}
+function drawTestCard(){const box=$('test-box');const b=testBatch;const w=b.words[testIdx];if(testDone){box.innerHTML='<div class="test-done">✅ 今日 Test 完成：共 '+b.words.length+' 词，<span style="color:var(--err)">'+testResult.miss+' 个进入错题集</span>。<br><br><button class="tbtn reveal" onclick="switchTab(&quot;err&quot;)">去错题集看看</button> <button class="tbtn got" onclick="renderTest()">再测一遍</button></div>';updateCounts();return}box.innerHTML='<div class="test-progress">第 '+(testIdx+1)+' / '+b.words.length+' 词 · 批次 '+esc(b.date)+'</div><div class="test-word">'+esc(w.word)+'</div>'+(testRevealed?'<div class="test-ph">'+esc(w.phonetic||'')+'</div>':'<div class="test-ph">看英文，想中文</div>')+'<div class="test-detail'+(testRevealed?' show':'')+'"><div><span class="lbl">音标</span>'+esc(w.phonetic||'')+'</div><div><span class="lbl">词义</span>'+esc(w.meaning)+'</div><div><span class="lbl">例句</span>'+esc(w.example||w.mnemonic||'')+'</div></div>'+(testRevealed?'<div class="test-btns"><button class="tbtn got" onclick="testAnswer(true)">记住了</button><button class="tbtn miss" onclick="testAnswer(false)">还是没记住</button></div>':'<div class="test-btns"><button class="tbtn got" onclick="testAnswer(true)">想出来了</button><button class="tbtn miss" onclick="testAnswer(false)">没记住</button><button class="tbtn reveal" onclick="testReveal()">显示答案</button></div>')}
+function testReveal(){testRevealed=true;drawTestCard()}
+function testAnswer(got){const b=testBatch,w=b.words[testIdx];if(!got)addWrong(w.word);testResult=testResult||{miss:0};if(!got)testResult.miss++;testIdx++;if(testIdx>=b.words.length){testDone=true;markTested(b.id);drawTestCard()}else{testRevealed=false;drawTestCard()}}
+function renderErrors(){const list=$('err-list');list.innerHTML='';const wrong=getWrong();for(const word of wrong){const w=findWord(word);if(!w)continue;const row=document.createElement('div');row.innerHTML='<div class="e-row"><input type="checkbox" data-word="'+esc(w.word)+'"><span class="e-word">'+esc(w.word)+'</span><button class="e-expand">展开 ▾</button></div><div class="e-detail"><div><span class="lbl">音标</span>'+esc(w.phonetic||'')+'</div><div><span class="lbl">词义</span>'+esc(w.meaning)+'</div><div><span class="lbl">例句</span>'+esc(w.example||w.mnemonic||'')+'</div></div>';row.querySelector('input').onchange=function(){removeWrong(w.word);renderErrors();updateCounts()};row.querySelector('.e-expand').onclick=function(){const d=row.querySelector('.e-detail');d.classList.toggle('show');this.textContent=d.classList.contains('show')?'收起 ▴':'展开 ▾'};list.appendChild(row)}updateCounts()}
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 renderBatches();renderTest();renderErrors();
 </script>
 </body>
