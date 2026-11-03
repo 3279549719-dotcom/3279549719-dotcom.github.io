@@ -45,7 +45,7 @@ window.BATCHES=(window.BATCHES||[]).concat([
 {word:"withstand",phonetic:"/wɪðˈstænd/",meaning:"承受，抵挡",mnemonic:"迎着它站着不倒"}]},
 {id:"hist-15",date:"第 15 批",testable:false,words:[
 {word:"accountable",phonetic:"/əˈkaʊntəbl/",meaning:"负有责任的",mnemonic:"账要说得清"},
-{word:"breach",phonetic:"/briːtʃ/",meaning:"违反，破坏；缺口",mnemonic:"把规矩“撕开”一道口子=违约"},
+{word:"breach",phonetic:"/briːtʃ/",meaning:"违反，破坏；缺口",mnemonic:"把规矩“撕开”一道口子＝违约"},
 {word:"contentious",phonetic:"/kənˈtenʃəs/",meaning:"有争议的",mnemonic:"容易开战"},
 {word:"deplete",phonetic:"/dɪˈpliːt/",meaning:"耗尽，使枯竭",mnemonic:"把满的掏空"},
 {word:"entail",phonetic:"/ɪnˈteɪl/",meaning:"需要，牵涉",mnemonic:"拖一串尾巴"},
