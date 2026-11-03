@@ -4,53 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>雅思词汇复习 · 新词 / Test / 错题集</title>
-<style>
-:root{--bg:#f6f3ec;--card:#fffdf8;--ink:#262019;--muted:#8a8071;--accent:#b3551f;--line:#e6dfd0;--ok:#3a7d44;--err:#b03a2e}
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Georgia,"Noto Serif SC","Songti SC",serif;background:var(--bg);color:var(--ink);max-width:640px;margin:0 auto;padding:20px 16px 90px;line-height:1.65;font-size:16px;-webkit-font-smoothing:antialiased}
-header{padding:12px 4px 8px}h1{font-size:26px;letter-spacing:.5px}.sub{color:var(--muted);font-size:13px;margin-top:2px}
-.tabs{display:flex;gap:8px;margin:14px 0 18px}
-.tab-btn{flex:1;padding:10px 0;border:1px solid var(--line);border-radius:10px;background:var(--card);font-family:inherit;font-size:15px;color:var(--ink);cursor:pointer;transition:all .15s}
-.tab-btn.active{background:var(--ink);color:#fff;border-color:var(--ink)}
-.tab-btn .cnt{display:block;font-size:12px;opacity:.7;margin-top:2px}
-.panel{display:none}.panel.active{display:block}
-.batch{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:10px;overflow:hidden}
-.batch-head{display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer}
-.batch-head .date{font-size:14px;font-weight:bold}.batch-head .meta{font-size:12px;color:var(--muted);flex:1}
-.batch-head .arrow{color:var(--muted);font-size:12px;transition:transform .15s}
-.batch.open .batch-head .arrow{transform:rotate(180deg)}
-.batch-body{display:none;border-top:1px solid var(--line)}.batch.open .batch-body{display:block}
-.w-row{display:flex;gap:10px;padding:10px 14px;border-bottom:1px solid var(--line);font-size:15px}
-.w-row:last-child{border-bottom:none}.w-row .w{font-weight:bold;min-width:120px;font-size:16px}
-.w-row .w .ph{display:block;font-size:12px;color:var(--muted);font-weight:normal}
-.w-row .w .mn{display:block;font-size:12px;color:var(--muted);font-weight:normal;margin-top:2px}
-.w-row .def{flex:1}.w-row .def .ex{font-size:12.5px;color:#5a5144;font-style:italic;margin-top:3px;display:block}
-.test-box{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:28px 20px;text-align:center}
-.test-progress{font-size:13px;color:var(--muted);margin-bottom:6px}
-.test-word{font-size:34px;font-weight:bold;letter-spacing:1px;margin:16px 0 4px}
-.test-ph{font-size:15px;color:var(--muted);margin-bottom:20px}
-.test-detail{display:none;text-align:left;background:var(--bg);border-radius:10px;padding:14px 16px;margin:8px 0 18px}
-.test-detail.show{display:block}.test-detail .lbl{color:var(--muted);font-size:12.5px;margin-right:6px}
-.test-detail div{margin:5px 0;font-size:15px}
-.test-btns{display:flex;gap:8px;margin-top:8px}
-.tbtn{flex:1;padding:11px 0;border-radius:10px;border:1px solid var(--line);background:#fff;font-family:inherit;font-size:14px;cursor:pointer}
-.tbtn.got{color:var(--ok);border-color:var(--ok)}.tbtn.miss{color:var(--err);border-color:var(--err)}.tbtn.reveal{color:var(--accent);border-color:var(--accent)}
-.tbtn:disabled{opacity:.4;cursor:default}
-.test-empty{padding:40px 20px;text-align:center;color:var(--muted)}.test-empty b{display:block;font-size:20px;color:var(--ink);margin-bottom:6px}
-.test-done{font-size:15px;padding:10px 0}
-.err-count{background:var(--card);border-left:4px solid var(--accent);border-radius:8px;padding:10px 16px;margin-bottom:14px;font-size:15px}
-.err-count b{color:var(--accent);font-size:19px}
-.e-row{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:11px 14px;margin-bottom:8px}
-.e-row input[type=checkbox]{width:19px;height:19px;accent-color:var(--ok);cursor:pointer;flex-shrink:0}
-.e-word{font-size:18px;font-weight:bold;flex:1}
-.e-expand{border:1px solid var(--line);background:#fff;border-radius:8px;padding:4px 12px;font-family:inherit;font-size:13px;color:#555;cursor:pointer}
-.e-detail{display:none;background:var(--card);border:1px solid var(--line);border-top:none;border-radius:0 0 10px 10px;padding:4px 14px 14px;margin:-8px 0 8px;color:#444;font-size:15px}
-.e-detail.show{display:block}.e-detail .lbl{color:var(--muted);font-size:12.5px;margin-right:6px}.e-detail div{margin:5px 0}
-.err-empty{text-align:center;color:var(--muted);padding:50px 20px;font-size:15px;border:2px dashed var(--line);border-radius:14px}
-.mini-btn{display:inline-block;margin-left:8px;padding:3px 12px;font-size:12px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink);cursor:pointer;vertical-align:middle}
-.mini-btn:hover{border-color:var(--accent);color:var(--accent)}
-.foot{margin-top:26px;font-size:12px;color:var(--muted);text-align:center;line-height:1.8}
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 <header><h1>📚 雅思词汇复习</h1><p class="sub">每天 20:00 新词入库 · 每天 10:00 Test 昨日新词 · 错词自动进错题集</p></header>
@@ -71,5 +25,32 @@ header{padding:12px 4px 8px}h1{font-size:26px;letter-spacing:.5px}.sub{color:var
 <div class="err-empty" id="err-empty" style="display:none">暂无错词，继续保持 💪</div>
 </section>
 <div class="foot">学习状态存在浏览器本地（localStorage），刷新不丢；清浏览器缓存会重置。<br>每晚 20:00 推送的新词由助手自动写入本文件词库；Test 中没记住的词自动进入错题集。</div>
-<script>
-const BATCHES=[
+<script src="data-batches-1.js"></script>
+<script src="data-batches-2.js"></script>
+<script src="data-batches-3.js"></script>
+<script src="data-batches-4.js"></script>
+<script src="data-batches-5.js"></script>
+<script src="data-batches-6.js"></script>
+<script src="data-batches-7.js"></script>
+<script src="data-batches-8.js"></script>
+<script src="data-batches-9.js"></script>
+<script src="data-batches-10.js"></script>
+<script src="data-batches-11.js"></script>
+<script src="data-batches-12.js"></script>
+<script src="data-batches-13.js"></script>
+<script src="data-batches-14.js"></script>
+<script src="data-batches-15.js"></script>
+<script src="data-batches-16.js"></script>
+<script src="data-batches-17.js"></script>
+<script src="data-batches-18.js"></script>
+<script src="data-batches-19.js"></script>
+<script src="data-batches-20.js"></script>
+<script src="data-batches-21.js"></script>
+<script src="data-batches-22.js"></script>
+<script src="data-batches-23.js"></script>
+<script src="data-batches-24.js"></script>
+<script src="app.js"></script>
+<script src="app-2.js"></script>
+
+</body>
+</html>
