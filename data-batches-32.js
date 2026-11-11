@@ -1,6 +1,6 @@
 window.BATCHES=(window.BATCHES||[]).concat([
 {id:"2026-11-11",date:"2026-11-11",testable:true,words:[
-{word:"inflation",phonetic:"/ɪnˈfleɪʃn/",meaning:"通货膨胀（物价总体持续上涨）",example:"Rising inflation has made basic groceries noticeably more expensive.（通胀加剧已经让日常食品明显更贵了。）",mnemonic:"in(向内)+flat(吹)——钱被“吹”得膨胀了，能买的东西反而变少"},
+{word:"inflation",phonetic:"/ɪnˈfleɪʃn/",meaning:"通货膨胀（物价总体持续上涨）",example:"Rising inflation has made basic groceries noticeably more expensive.（通胀加剧已经让日常食品明显更贵了。）",mnemonic:"in(向内)+flate(吹气)——钱被“吹”得膨胀了，能买的东西反而变少"},
 {word:"cost of living",phonetic:"/kɒst əv ˈlɪvɪŋ/",meaning:"生活成本（衣食住行的总开销）",example:"The cost of living in big cities forces many young graduates to share flats.（大城市的生活成本迫使许多年轻毕业生合租。）",mnemonic:"cost(花费)+of living(生活)——过日子要花的那笔钱"},
 {word:"purchasing power",phonetic:"/pəˈtʃeɪsɪŋ ˈpaʊə(r)/",meaning:"购买力（同样一笔钱能买多少东西）",example:"Wages have risen, but purchasing power has barely changed.（工资涨了，但购买力几乎没有变化。）",mnemonic:"purchasing(购买)+power(力量)——钱“买得动”的力量"},
 {word:"savings",phonetic:"/ˈseɪvɪŋz/",meaning:"储蓄（存下来的钱）",example:"Many families have no savings to fall back on if they lose their jobs.（许多家庭一旦失业就没有储蓄可以依靠。）",mnemonic:"save(救、存)+ings——存下来救命的那部分；习惯用复数"},
