@@ -1,0 +1,13 @@
+window.BATCHES=(window.BATCHES||[]).concat([
+{id:"2026-11-24",date:"2026-11-24",testable:true,words:[
+{word:"small business",phonetic:"/smɔːl ˈbɪznəs/",meaning:"n. 小企业；中小企业（雅思经济与就业话题：创业、地方经济）",example:"Small businesses create most new jobs, yet they are the first to struggle when rents and interest rates rise.（小企业创造了大部分新岗位，但房租和利率一涨，它们也最先撑不住。）",mnemonic:"small（小）+ business（生意）→ 街角那家撑起一条街就业的小店。"},
+{word:"supply chain",phonetic:"/səˈplaɪ tʃeɪn/",meaning:"n. 供应链（雅思经济、全球化与环境话题）",example:"A single blocked port can stall the whole supply chain, from factory floors to supermarket shelves.（一个港口被堵，整条供应链就会卡住，从车间一直卡到超市货架。）",mnemonic:"supply（供给）+ chain（链条）→ 一环扣一环，断一环全链停摆。"},
+{word:"profit margin",phonetic:"/ˈprɒfɪt ˈmɑːdʒɪn/",meaning:"n. 利润率；利润空间（雅思商业与经济话题）",example:"Supermarkets keep a thin profit margin, so a small rise in fuel costs can wipe out their gains.（超市利润率很薄，燃油成本小幅上涨就能吃掉它们的利润。）",mnemonic:"margin 是页边的空白 → 卖价与成本之间剩下的那点余量。"},
+{word:"economies of scale",phonetic:"/ɪˈkɒnəmiz əv skeɪl/",meaning:"n. 规模经济（雅思经济与制造业话题）",example:"Factories enjoy economies of scale: the more they produce, the cheaper each unit becomes.（工厂享有规模经济：产得越多，单件成本越低。）",mnemonic:"scale（规模）→ 摊薄：做的东西多了，每件摊到的固定成本就薄了。"},
+{word:"market share",phonetic:"/ˈmɑːkɪt ʃeə/",meaning:"n. 市场份额（雅思商业竞争与市场结构话题）",example:"A firm can grow its revenue while losing market share if the whole market expands faster.（如果整个市场扩张得更快，企业收入在涨，市场份额也可能在丢。）",mnemonic:"share 是分蛋糕分到的那一块 → 这块蛋糕你切走了多大。"},
+{word:"venture capital",phonetic:"/ˈventʃə ˈkæpɪtl/",meaning:"n. 风险投资（雅思科技与创业话题）",example:"Venture capital funds risky ideas that banks refuse to touch, but it also demands rapid growth.（风险投资支持银行不敢碰的高风险创意，但它同时也要求快速扩张。）",mnemonic:"venture（冒险）+ capital（资本）→ 拿钱去赌一个还没被验证的点子。"},
+{word:"business model",phonetic:"/ˈbɪznəs ˈmɒdl/",meaning:"n. 商业模式（雅思商业与科技话题）",example:"A free app can be a sound business model if advertising or subscriptions cover its costs.（只要广告或订阅能覆盖成本，免费应用也可以是靠谱的商业模式。）",mnemonic:"model 是图纸 → 这家公司靠什么赚钱的那张图纸。"},
+{word:"monopoly",phonetic:"/məˈnɒpəli/",meaning:"n. 垄断；专营（雅思经济与政府监管话题）",example:"A monopoly can keep prices high because customers have nowhere else to go.（垄断者能把价格维持在高位，因为顾客没有别的地方可去。）",mnemonic:"mono-（单一）+ poly（卖）→ 一条街上只有一家店，价钱它说了算。"},
+{word:"niche market",phonetic:"/niːʃ ˈmɑːkɪt/",meaning:"n. 细分市场；小众市场（雅思商业与消费话题）",example:"Small firms survive by serving a niche market that large chains consider too small to bother with.（小公司靠服务大连锁嫌太小的细分市场活下来。）",mnemonic:"niche 是墙上凹进去的小壁龛 → 只容得下一个小而专的位置。"},
+{word:"cash flow",phonetic:"/kæʃ fləʊ/",meaning:"n. 现金流（雅思商业与个人理财话题）",example:"A profitable company can still collapse if its cash flow dries up while customers delay payment.（顾客拖着不付款、现金流干了，一家盈利的公司照样可能倒闭。）",mnemonic:"flow 是水流 → 账上有利润，不等于口袋里有现金。"}
+]}]);
